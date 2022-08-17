@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32421.90
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DivinitySoftworks.Apps.TravelExpenses", "DivinitySoftworks.Apps.TravelExpenses\DivinitySoftworks.Apps.TravelExpenses.csproj", "{F3F3A78A-0A26-4282-9513-76561F1EB7BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DivinitySoftworks.Apps.TravelExpenses", "DivinitySoftworks.Apps.TravelExpenses\DivinitySoftworks.Apps.TravelExpenses.csproj", "{F3F3A78A-0A26-4282-9513-76561F1EB7BB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DivinitySoftworks.Libraries", "DivinitySoftworks.Libraries", "{AAEC7A1F-7319-48D9-9D3D-A3539EDB2F3C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DivinitySoftworks.Apps.Core", "..\DivinitySoftworks.Apps.Core\DivinitySoftworks.Apps.Core\DivinitySoftworks.Apps.Core.csproj", "{BFCEF98A-D393-4294-8040-F3861FB6CE2E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +19,16 @@ Global
 		{F3F3A78A-0A26-4282-9513-76561F1EB7BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3F3A78A-0A26-4282-9513-76561F1EB7BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F3F3A78A-0A26-4282-9513-76561F1EB7BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFCEF98A-D393-4294-8040-F3861FB6CE2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFCEF98A-D393-4294-8040-F3861FB6CE2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFCEF98A-D393-4294-8040-F3861FB6CE2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFCEF98A-D393-4294-8040-F3861FB6CE2E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BFCEF98A-D393-4294-8040-F3861FB6CE2E} = {AAEC7A1F-7319-48D9-9D3D-A3539EDB2F3C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {314CC9A2-5643-47BC-8D87-63CB2F82799A}
