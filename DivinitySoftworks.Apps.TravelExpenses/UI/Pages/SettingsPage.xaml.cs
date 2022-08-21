@@ -14,14 +14,5 @@ namespace DivinitySoftworks.Apps.TravelExpenses.UI.Pages {
                 return (ISettingsPageViewModel)DataContext;
             }
         }
-
-        private async void OnPageLoaded(object sender, System.Windows.RoutedEventArgs e) {
-            await ViewModel.LoadAsync();
-        }
-
-        private async void OnLostFocus(object sender, System.Windows.RoutedEventArgs e) {
-            await System.Threading.Tasks.Task.Delay(100);
-            await ViewModel.SaveAsync();
-        }
     }
 }

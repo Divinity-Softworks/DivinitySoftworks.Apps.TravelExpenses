@@ -3,6 +3,7 @@ using DivinitySoftworks.Apps.TravelExpenses.Services;
 using DivinitySoftworks.Apps.TravelExpenses.UI.Pages;
 using DivinitySoftworks.Apps.TravelExpenses.UI.ViewModels;
 using DivinitySoftworks.Apps.TravelExpenses.UI.Windows;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DivinitySoftworks.Apps.TravelExpenses {
@@ -17,8 +18,10 @@ namespace DivinitySoftworks.Apps.TravelExpenses {
     public partial class App : Application {
 
         /// <inheritdoc/>
-        protected override void OnStartup(System.Windows.StartupEventArgs e) {
+        protected override async void OnStartup(System.Windows.StartupEventArgs e) {
             base.OnStartup(e);
+
+            await ServiceProvider.GetRequiredService<IUserSettings>().LoadAsync();
 
             ServiceProvider.GetRequiredService<MainWindow>().Show();
         }
@@ -27,7 +30,11 @@ namespace DivinitySoftworks.Apps.TravelExpenses {
         override protected void ConfigureServices(IServiceCollection services) {
             base.ConfigureServices(services);
             services.AddSingleton<ILogService, LogService>();
-            services.AddSingleton<ITravelExpensesService, TravelExpensesService>();
+            services.AddSingleton<ITravelExpensesService, TravelExpensesService>(); 
+            
+            services.AddMediatR(typeof(App));
+
+            services.AddSingleton<IUserSettings, UserSettings>();
 
             services.AddTransient<IMainWindowViewModel, MainWindowViewModel>();
             services.AddTransient<ITravelExpensesDetailsViewModel, TravelExpensesDetailsViewModel>();

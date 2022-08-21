@@ -1,4 +1,5 @@
 ﻿using DivinitySoftworks.Apps.Core.Components;
+using DivinitySoftworks.Apps.TravelExpenses.Data.Enums;
 using DivinitySoftworks.Apps.TravelExpenses.Data.Models;
 using DivinitySoftworks.Apps.TravelExpenses.UI.Pages.Base;
 using DivinitySoftworks.Apps.TravelExpenses.UI.ViewModels;
@@ -32,11 +33,16 @@ namespace DivinitySoftworks.Apps.TravelExpenses.UI.Pages {
 
         private void OnAddMonth_Clicked(object sender, MouseButtonEventArgs e) {
             ViewModel.AddMonths(1);
-
         }
 
-        private void ToggleLabel_MouseUp(object sender, MouseButtonEventArgs e) {
-            ((ToggleLabel)sender).IsToggled = !((ToggleLabel)sender).IsToggled;
+        private void OnToggleButtonClick(object sender, System.Windows.RoutedEventArgs e) {
+            if (sender is not ToggleButton toggleButton) return;
+            if (toggleButton.Value is not CalendarRange calendarRange) return;
+            ViewModel.Details.CalendarRange = calendarRange;
+        }
+
+        private async void OnExport(object sender, System.Windows.RoutedEventArgs e) {
+            await ViewModel.ExportAsync();
         }
     }
 }

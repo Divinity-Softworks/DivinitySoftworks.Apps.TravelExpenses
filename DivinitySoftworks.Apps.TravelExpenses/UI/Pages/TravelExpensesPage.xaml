@@ -2,7 +2,9 @@
                x:Name="_ContentPage"
                xmlns:b="clr-namespace:DivinitySoftworks.Apps.TravelExpenses.UI.Pages.Base"
                xmlns:v="clr-namespace:DivinitySoftworks.Apps.TravelExpenses.UI.Converters"   
-               xmlns:components="clr-namespace:DivinitySoftworks.Apps.Core.Components;assembly=DivinitySoftworks.Apps.Core"                 
+               xmlns:e="clr-namespace:DivinitySoftworks.Apps.TravelExpenses.Data.Enums"   
+               xmlns:components="clr-namespace:DivinitySoftworks.Apps.Core.Components;assembly=DivinitySoftworks.Apps.Core"  
+               xmlns:converters="clr-namespace:DivinitySoftworks.Apps.Core.Converters;assembly=DivinitySoftworks.Apps.Core"                 
                TextOptions.TextFormattingMode="Display" TextOptions.TextHintingMode="Animated" TextOptions.TextRenderingMode="ClearType" UseLayoutRounding="True"
                mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800" 
                Focusable="False" FontFamily="{StaticResource Fonts.Primary}"
@@ -19,49 +21,78 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="64" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="32" />
             </Grid.RowDefinitions>
-            <Label Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" 
-                       FontSize="32" FontWeight="Bold" Content="Stats" />
-            <components:ToggleButton Grid.Row="2" Grid.Column="0" Toggled="{StaticResource Brushes.Sand}" IsToggled="True" CornerRadius="18">
+            <Label Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" FontSize="32" FontWeight="Bold" Content="Stats" Margin="0 0 0 18" />
+            <components:ToggleButton Grid.Row="2" Grid.Column="0" 
+                                     Toggled="{StaticResource Brushes.Sand}" IsToggled="{Binding CalendarRange, Converter={converters:EnumToBooleanConverter True={x:Static e:CalendarRange.Month}}}" 
+                                     Value="{x:Static e:CalendarRange.Month}"
+                                     CornerRadius="18" Click="OnToggleButtonClick">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <components:ToggleLabel Grid.Row="0" Margin="0" 
-                                            Foreground="{StaticResource Brushes.Gray.Dark}"
-                            IsToggled="False" Toggled="{StaticResource Brushes.Pink}"
-                           HorizontalAlignment="Center" VerticalAlignment="Bottom"
-                           FontSize="11" MouseUp="ToggleLabel_MouseUp">M O N T H</components:ToggleLabel>
-                    <Label Grid.Row="1" Margin="0 -18 0 0" 
+                                            Foreground="{StaticResource Brushes.Gray}" FontSize="11"
+                                            Toggled="{StaticResource Brushes.Pink}" IsToggled="{Binding CalendarRange, Converter={converters:EnumToBooleanConverter True={x:Static e:CalendarRange.Month}}}" 
+                                            HorizontalAlignment="Center" VerticalAlignment="Bottom">M O N T H</components:ToggleLabel>
+                    <Label Grid.Row="1" Margin="0 -18 0 0" FontSize="28"
                            Foreground="{StaticResource Brushes.Pink}"
-                           HorizontalAlignment="Center" VerticalAlignment="Top"
-                           FontSize="28" >.</Label>
+                           Visibility="{Binding CalendarRange, Converter={converters:EnumToVisibilityConverter Visible={x:Static e:CalendarRange.Month}}}"
+                           HorizontalAlignment="Center" VerticalAlignment="Top">.</Label>
                 </Grid>
             </components:ToggleButton>
-            <!--<Border Grid.Row="2" Grid.Column="0" Background="{StaticResource Brushes.Sand}" CornerRadius="18">
+            <components:ToggleButton Grid.Row="2" Grid.Column="1" 
+                                     Toggled="{StaticResource Brushes.Sand}" IsToggled="{Binding CalendarRange, Converter={converters:EnumToBooleanConverter True={x:Static e:CalendarRange.Year}}}"
+                                     Value="{x:Static e:CalendarRange.Year}"
+                                     CornerRadius="18" Click="OnToggleButtonClick">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <Label Grid.Row="0" Margin="0" 
+                    <components:ToggleLabel Grid.Row="0" Margin="0" 
+                                            Foreground="{StaticResource Brushes.Gray}" FontSize="11"
+                                            Toggled="{StaticResource Brushes.Pink}" IsToggled="{Binding CalendarRange, Converter={converters:EnumToBooleanConverter True={x:Static e:CalendarRange.Year}}}" 
+                                            HorizontalAlignment="Center" VerticalAlignment="Bottom">Y E A R</components:ToggleLabel>
+                    <Label Grid.Row="1" Margin="0 -18 0 0" FontSize="28"
                            Foreground="{StaticResource Brushes.Pink}"
-                           HorizontalAlignment="Center" VerticalAlignment="Bottom"
-                           FontSize="11">M O N T H</Label>
-                    <Label Grid.Row="1" Margin="0 -18 0 0" 
-                           Foreground="{StaticResource Brushes.Pink}"
-                           HorizontalAlignment="Center" VerticalAlignment="Top"
-                           FontSize="28" >.</Label>
+                           Visibility="{Binding CalendarRange, Converter={converters:EnumToVisibilityConverter Visible={x:Static e:CalendarRange.Year}}}"
+                           HorizontalAlignment="Center" VerticalAlignment="Top">.</Label>
                 </Grid>
-            </Border>
-            <Border Grid.Row="2" Grid.Column="1" Background="Red" CornerRadius="18">
+            </components:ToggleButton>
+            <components:ToggleButton Grid.Row="2" Grid.Column="2" 
+                                     Toggled="{StaticResource Brushes.Sand}" 
+                                     IsToggled="{Binding CalendarRange, Converter={converters:EnumToBooleanConverter True={x:Static e:CalendarRange.All}}}" 
+                                     Value="{x:Static e:CalendarRange.All}"
+                                     CornerRadius="18" Click="OnToggleButtonClick">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <components:ToggleLabel Grid.Row="0" Margin="0" 
+                                            Foreground="{StaticResource Brushes.Gray}" FontSize="11"
+                                            Toggled="{StaticResource Brushes.Pink}"
+                                            IsToggled="{Binding CalendarRange, Converter={converters:EnumToBooleanConverter True={x:Static e:CalendarRange.All}}}" 
+                                            HorizontalAlignment="Center" VerticalAlignment="Bottom">A L L</components:ToggleLabel>
+                    <Label Grid.Row="1" Margin="0 -18 0 0" 
+                           Foreground="{StaticResource Brushes.Pink}" FontSize="28"
+                           Visibility="{Binding CalendarRange, Converter={converters:EnumToVisibilityConverter Visible={x:Static e:CalendarRange.All}}}"
+                           HorizontalAlignment="Center" VerticalAlignment="Top">.</Label>
+                </Grid>
+            </components:ToggleButton>
 
+            <Border Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Background="Transparent" CornerRadius="32" Height="128"
+                    BorderBrush="{StaticResource Brushes.Sand}"
+                    BorderThickness="2">
+                <Button Height="44" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0 0 28 -20"
+                        Click="OnExport">
+                    Export Now
+                </Button>
             </Border>
-            <Border Grid.Row="2" Grid.Column="2" Background="Red" CornerRadius="18">
-
-            </Border>-->
         </Grid>
     </b:ContentPage.DetailsContent>
     <Grid Background="Transparent" Focusable="False">

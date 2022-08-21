@@ -1,6 +1,5 @@
-﻿using DivinitySoftworks.Apps.Core.Configuration.Managers;
-using DivinitySoftworks.Apps.Core.Data;
-using System.Threading.Tasks;
+﻿using DivinitySoftworks.Apps.Core.Data;
+using DivinitySoftworks.Apps.TravelExpenses.Core.Configuration;
 
 namespace DivinitySoftworks.Apps.TravelExpenses.UI.ViewModels {
 
@@ -19,107 +18,83 @@ namespace DivinitySoftworks.Apps.TravelExpenses.UI.ViewModels {
         int? Kilometers { get; set; }
 
         double? Price { get; set; }
-
-        ValueTask LoadAsync();
-
-        ValueTask SaveAsync();
     }
 
     public class SettingsPageViewModel : ViewModel, ISettingsPageViewModel {
-        readonly IConfigurationManager _configurationManager;
+        readonly IUserSettings _userSettings;
 
-        public SettingsPageViewModel(IConfigurationManager configurationManager) {
-            _configurationManager = configurationManager;
+        public SettingsPageViewModel(IUserSettings userSettings) {
+            _userSettings = userSettings;
         }
 
-        string? _name = default;
         public string? Name {
             get {
-                return _name;
+                return _userSettings.Name;
             }
             set {
-                ChangeAndNotify(ref _name, value);
+                _userSettings.Name = value;
+                Notify();
             }
         }
 
-        string? _department = default;
         public string? Department {
             get {
-                return _department;
+                return _userSettings.Department;
             }
             set {
-                ChangeAndNotify(ref _department, value);
+                _userSettings.Department = value;
+                Notify();
             }
         }
 
-        string? _manager = default;
         public string? Manager {
             get {
-                return _manager;
+                return _userSettings.Manager;
             }
             set {
-                ChangeAndNotify(ref _manager, value);
+                _userSettings.Manager = value;
+                Notify();
             }
         }
 
-        string? _workAddress = default;
         public string? WorkAddress {
             get {
-                return _workAddress;
+                return _userSettings.WorkAddress;
             }
             set {
-                ChangeAndNotify(ref _workAddress, value);
+                _userSettings.WorkAddress = value;
+                Notify();
             }
         }
 
-        string? _homeAddress = default;
         public string? HomeAddress {
             get {
-                return _homeAddress;
+                return _userSettings.HomeAddress;
             }
             set {
-                ChangeAndNotify(ref _homeAddress, value);
+                _userSettings.HomeAddress = value;
+                Notify();
             }
         }
 
-        int? _kilometers = default(int?);
         public int? Kilometers {
             get {
-                return _kilometers;
+                return _userSettings.Kilometers;
             }
             set {
-                ChangeAndNotify(ref _kilometers, value);
+                _userSettings.Kilometers = value;
+                Notify();
             }
         }
 
-        double? _price = default(double?);
         public double? Price {
             get {
-                return _price;
+                return _userSettings.Price;
             }
             set {
-                ChangeAndNotify(ref _price, value);
+                _userSettings.Price = value;
+                Notify();
             }
-        }
-
-        public async ValueTask LoadAsync() {
-            Name = await _configurationManager.GetUserSettingAsync<string?>(nameof(Name)) ?? default;
-            Department = await _configurationManager.GetUserSettingAsync<string?>(nameof(Department)) ?? default;
-            Manager = await _configurationManager.GetUserSettingAsync<string?>(nameof(Manager)) ?? default;
-            WorkAddress = await _configurationManager.GetUserSettingAsync<string?>(nameof(WorkAddress)) ?? default;
-            HomeAddress = await _configurationManager.GetUserSettingAsync<string?>(nameof(HomeAddress)) ?? default;
-            Kilometers = await _configurationManager.GetUserSettingAsync<int?>(nameof(Kilometers)) ?? default(int?);
-            Price = await _configurationManager.GetUserSettingAsync<double?>(nameof(Price)) ?? default(double?);
-        }
-
-        public async ValueTask SaveAsync() {
-            await _configurationManager.SetUserSettingAsync(nameof(Name), Name);
-            await _configurationManager.SetUserSettingAsync(nameof(Department), Department);
-            await _configurationManager.SetUserSettingAsync(nameof(Manager), Manager);
-            await _configurationManager.SetUserSettingAsync(nameof(WorkAddress), WorkAddress);
-            await _configurationManager.SetUserSettingAsync(nameof(HomeAddress), HomeAddress);
-            await _configurationManager.SetUserSettingAsync(nameof(Kilometers), Kilometers);
-            await _configurationManager.SetUserSettingAsync(nameof(Price), Price);
         }
     }
 }

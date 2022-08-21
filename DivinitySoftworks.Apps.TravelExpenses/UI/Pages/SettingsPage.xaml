@@ -2,8 +2,7 @@
                xmlns:b="clr-namespace:DivinitySoftworks.Apps.TravelExpenses.UI.Pages.Base"
                xmlns:components="clr-namespace:DivinitySoftworks.Apps.Core.Components;assembly=DivinitySoftworks.Apps.Core"
                mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800"
-               Title="Settings" 
-               Loaded="OnPageLoaded">
+               Title="Settings">
 
     <StackPanel Background="Transparent" CanVerticallyScroll="False">
         <Border Padding="16" Background="{StaticResource Brushes.Green.Light}" CornerRadius="24" Margin="0 18 0 0">
@@ -28,8 +27,7 @@
                                       FocusBrush="{StaticResource Brushes.Green.Dark}"
                                       VerticalContentAlignment="Center" HorizontalAlignment="Stretch"
                                       FontSize="14"
-                                      Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
-                                      LostFocus="OnLostFocus"/>
+                                      Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
             </Grid>
         </Border>
         <Border Padding="16" Background="{StaticResource Brushes.Red.Light}" CornerRadius="24" Margin="0 18 0 0">
@@ -54,8 +52,7 @@
                                       FocusBrush="{StaticResource Brushes.Red.Dark}"
                                       VerticalContentAlignment="Center" HorizontalAlignment="Stretch"
                                       FontSize="14"
-                                      Text="{Binding Department, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
-                                      LostFocus="OnLostFocus" />
+                                      Text="{Binding Department, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
             </Grid>
         </Border>
         <Border Padding="16" Background="{StaticResource Brushes.Blue.Light}" CornerRadius="24" Margin="0 18 0 0">
@@ -80,8 +77,7 @@
                                       FocusBrush="{StaticResource Brushes.Blue.Dark}"
                                       VerticalContentAlignment="Center" HorizontalAlignment="Stretch"
                                       FontSize="14"
-                                      Text="{Binding Manager, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
-                                      LostFocus="OnLostFocus" />
+                                      Text="{Binding Manager, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
             </Grid>
         </Border>
         <Border Padding="16" Background="{StaticResource Brushes.Orange.Light}" CornerRadius="24" Margin="0 18 0 0">
@@ -106,8 +102,7 @@
                                       FocusBrush="{StaticResource Brushes.Orange.Dark}"
                                       VerticalContentAlignment="Center" HorizontalAlignment="Stretch"
                                       FontSize="14"
-                                      Text="{Binding WorkAddress, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
-                                      LostFocus="OnLostFocus" />
+                                      Text="{Binding WorkAddress, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
             </Grid>
         </Border>
         <Border Padding="16" Background="{StaticResource Brushes.Green.Light}" CornerRadius="24" Margin="0 18 0 0">
@@ -132,8 +127,7 @@
                                       FocusBrush="{StaticResource Brushes.Green.Dark}"
                                       VerticalContentAlignment="Center" HorizontalAlignment="Stretch"
                                       FontSize="14"
-                                      Text="{Binding HomeAddress, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
-                                      LostFocus="OnLostFocus"/>
+                                      Text="{Binding HomeAddress, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
             </Grid>
         </Border>
         <Border Padding="16" Background="{StaticResource Brushes.Red.Light}" CornerRadius="24" Margin="0 18 0 0">
@@ -158,8 +152,7 @@
                                       FocusBrush="{StaticResource Brushes.Red.Dark}"
                                       VerticalContentAlignment="Center" HorizontalAlignment="Stretch"
                                       FontSize="14"
-                                      Text="{Binding Kilometers, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
-                                      LostFocus="OnLostFocus" />
+                                      Text="{Binding Kilometers, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
             </Grid>
         </Border>
         <Border Padding="16" Background="{StaticResource Brushes.Blue.Light}" CornerRadius="24" Margin="0 18 0 32">
@@ -184,8 +177,7 @@
                                       FocusBrush="{StaticResource Brushes.Blue.Dark}"
                                       VerticalContentAlignment="Center" HorizontalAlignment="Stretch"
                                       FontSize="14"
-                                      Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"                                      
-                                      LostFocus="OnLostFocus" />
+                                      Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
             </Grid>
         </Border>
     </StackPanel>

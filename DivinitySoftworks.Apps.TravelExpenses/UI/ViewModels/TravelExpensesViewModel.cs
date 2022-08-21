@@ -16,9 +16,12 @@ namespace DivinitySoftworks.Apps.TravelExpenses.UI.ViewModels {
 
         string Title { get; }
 
+        ITravelExpensesDetailsViewModel Details { get; }
+
         void AddMonths(int amount);
 
         Task UpdateStateAsync(DateItem dayItem);
+        Task ExportAsync();
     }
 
     public class TravelExpensesViewModel : ViewModel, ITravelExpensesViewModel {
@@ -49,7 +52,7 @@ namespace DivinitySoftworks.Apps.TravelExpenses.UI.ViewModels {
                 return _date;
             }
             set {
-                ChangeAndNotify(ref _date, value, additionalProperties: new[] { nameof(Month), nameof(Year), nameof(Title) });                
+                ChangeAndNotify(ref _date, value, additionalProperties: new[] { nameof(Month), nameof(Year), nameof(Title) });
             }
         }
 
@@ -121,6 +124,10 @@ namespace DivinitySoftworks.Apps.TravelExpenses.UI.ViewModels {
 
                 dateTime = dateTime.AddDays(1);
             }
+        }
+
+        public Task ExportAsync() {
+            return _travelExpensesService.ExportAsync(Date);
         }
     }
 }
