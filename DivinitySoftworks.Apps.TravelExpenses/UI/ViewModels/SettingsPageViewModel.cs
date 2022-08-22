@@ -18,6 +18,8 @@ namespace DivinitySoftworks.Apps.TravelExpenses.UI.ViewModels {
         int? Kilometers { get; set; }
 
         double? Price { get; set; }
+
+        string? LicenseKey { get; set; }
     }
 
     public class SettingsPageViewModel : ViewModel, ISettingsPageViewModel {
@@ -93,6 +95,15 @@ namespace DivinitySoftworks.Apps.TravelExpenses.UI.ViewModels {
             }
             set {
                 _userSettings.Price = value;
+                Notify();
+            }
+        }
+        public string? LicenseKey {
+            get {
+                return _userSettings.LicenseKey;
+            }
+            set {
+                _userSettings.LicenseKey = value;
                 Notify();
             }
         }

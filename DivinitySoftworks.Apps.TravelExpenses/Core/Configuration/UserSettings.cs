@@ -14,7 +14,7 @@ namespace DivinitySoftworks.Apps.TravelExpenses.Core.Configuration {
         string? HomeAddress { get; set; }
         int? Kilometers { get; set; }
         double? Price { get; set; }
-
+        string? LicenseKey { get; set; }
         ValueTask LoadAsync();
     }
 
@@ -104,14 +104,28 @@ namespace DivinitySoftworks.Apps.TravelExpenses.Core.Configuration {
             }
         }
 
+        string? _licenseKey;
+        public string? LicenseKey {
+            get { 
+                return _licenseKey;
+            }
+            set {
+                _licenseKey = value;
+                _mediator.Send(new ConfigurationItem(nameof(LicenseKey), value));
+            }
+        }
+
         public async ValueTask LoadAsync() {
-            Name = await _configurationManager.GetUserSettingAsync<string?>(nameof(Name)) ?? default;
-            Department = await _configurationManager.GetUserSettingAsync<string?>(nameof(Department)) ?? default;
-            Manager = await _configurationManager.GetUserSettingAsync<string?>(nameof(Manager)) ?? default;
-            WorkAddress = await _configurationManager.GetUserSettingAsync<string?>(nameof(WorkAddress)) ?? default;
-            HomeAddress = await _configurationManager.GetUserSettingAsync<string?>(nameof(HomeAddress)) ?? default;
-            Kilometers = await _configurationManager.GetUserSettingAsync<int?>(nameof(Kilometers)) ?? default(int?);
-            Price = await _configurationManager.GetUserSettingAsync<double?>(nameof(Price)) ?? default(double?);
+            _name = await _configurationManager.GetUserSettingAsync<string?>(nameof(Name)) ?? default;
+            _department = await _configurationManager.GetUserSettingAsync<string?>(nameof(Department)) ?? default;
+            _manager = await _configurationManager.GetUserSettingAsync<string?>(nameof(Manager)) ?? default;
+            _workAddress = await _configurationManager.GetUserSettingAsync<string?>(nameof(WorkAddress)) ?? default;
+            _homeAddress = await _configurationManager.GetUserSettingAsync<string?>(nameof(HomeAddress)) ?? default;
+            _kilometers = await _configurationManager.GetUserSettingAsync<int?>(nameof(Kilometers)) ?? default(int?);
+            _price = await _configurationManager.GetUserSettingAsync<double?>(nameof(Price)) ?? default(double?);
+            _licenseKey = await _configurationManager.GetUserSettingAsync<string?>(nameof(LicenseKey)) ?? default;
+
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(_licenseKey);
         }
     }
 }
