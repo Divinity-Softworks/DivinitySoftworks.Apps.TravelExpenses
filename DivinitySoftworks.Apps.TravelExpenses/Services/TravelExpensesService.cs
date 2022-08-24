@@ -21,15 +21,13 @@ namespace DivinitySoftworks.Apps.TravelExpenses.Services {
     }
 
     public class TravelExpensesService : ITravelExpensesService {
-        IAppSettings _appSettings;
-        IConfigurationManager _configurationManager;
-        DirectoryInfo _directoryInfo;
+        readonly IUserSettings _userSettings;
+        readonly DirectoryInfo _directoryInfo;
 
-        public TravelExpensesService(IAppSettings appSettings, IConfigurationManager configurationManager) {
-            _appSettings = appSettings;
-            _configurationManager = configurationManager;
+        public TravelExpensesService(IAppSettings appSettings, IUserSettings userSettings) {
+            _userSettings = userSettings;
 
-            _directoryInfo = new DirectoryInfo(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Divinity Softworks", "Travel Expenses"));
+            _directoryInfo = new DirectoryInfo(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Divinity Softworks", "Travel Expenses", appSettings.DataPath));
             if (!_directoryInfo.Exists) _directoryInfo.Create();
         }
 
@@ -39,13 +37,13 @@ namespace DivinitySoftworks.Apps.TravelExpenses.Services {
                     MonthlyData? monthlyData = await LoadAsync(date.Year, date.Month);
                     if (monthlyData is null || monthlyData.Days.Count == 0) throw new Exception($"No data found for {date.ToDateTime(TimeOnly.MinValue):MMMM yyyy} to export.");
 
-                    string? name = await _configurationManager.GetUserSettingAsync<string?>("Name") ?? default;
-                    string? department = await _configurationManager.GetUserSettingAsync<string?>("Department") ?? default;
-                    string? manager = await _configurationManager.GetUserSettingAsync<string?>("Manager") ?? default;
-                    string? workAddress = await _configurationManager.GetUserSettingAsync<string?>("WorkAddress") ?? default;
-                    string? homeAddress = await _configurationManager.GetUserSettingAsync<string?>("HomeAddress") ?? default;
-                    int? kilometers = await _configurationManager.GetUserSettingAsync<int?>("Kilometers") ?? default(int?);
-                    double? price = await _configurationManager.GetUserSettingAsync<double?>("Price") ?? default(double?);
+                    string? name = _userSettings.Name;
+                    string? department = _userSettings.Department;
+                    string? manager = _userSettings.Manager;
+                    string? workAddress = _userSettings.WorkAddress;
+                    string? homeAddress = _userSettings.HomeAddress;
+                    int? kilometers = _userSettings.Kilometers;
+                    double? price = _userSettings.Price;
 
                     if (name is null) throw new Exception("'Name' cannot be empty.");
                     if (department is null) throw new Exception("'Department' cannot be empty.");
@@ -200,7 +198,7 @@ namespace DivinitySoftworks.Apps.TravelExpenses.Services {
                 if (year < 2000 || year > 2100) return null;
                 if (month < 1 || month > 12) return null;
 
-                DirectoryInfo directoryInfo = new(Path.Combine(_directoryInfo.FullName, _appSettings.DataPath));
+                DirectoryInfo directoryInfo = new(_directoryInfo.FullName);
                 if (!directoryInfo.Exists) _directoryInfo.Create();
                 FileInfo fileInfo = new(Path.Combine(directoryInfo.FullName, $"{year}{month.ToString().PadLeft(2, '0')}.dsdata"));
                 if (!fileInfo.Exists) return new MonthlyData(year, month);
@@ -212,7 +210,7 @@ namespace DivinitySoftworks.Apps.TravelExpenses.Services {
         /// <inheritdoc/>
         public Task SaveAsync(MonthlyData monthlyData) {
             return Task.Run(() => {
-                DirectoryInfo directoryInfo = new(Path.Combine(_directoryInfo.FullName, _appSettings.DataPath));
+                DirectoryInfo directoryInfo = new(_directoryInfo.FullName);
                 if (!directoryInfo.Exists) directoryInfo.Create();
                 FileInfo fileInfo = new(Path.Combine(directoryInfo.FullName, $"{monthlyData.Year}{monthlyData.Month.ToString().PadLeft(2, '0')}.dsdata"));
 

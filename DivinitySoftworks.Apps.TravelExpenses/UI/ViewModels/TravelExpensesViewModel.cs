@@ -16,11 +16,14 @@ namespace DivinitySoftworks.Apps.TravelExpenses.UI.ViewModels {
 
         string Title { get; }
 
+        DateTime? Exported { get; }
+
         ITravelExpensesDetailsViewModel Details { get; }
 
         void AddMonths(int amount);
 
         Task UpdateStateAsync(DateItem dayItem);
+
         Task ExportAsync();
     }
 
@@ -29,8 +32,9 @@ namespace DivinitySoftworks.Apps.TravelExpenses.UI.ViewModels {
 
         public TravelExpensesViewModel(ITravelExpensesDetailsViewModel travelExpensesDetailsViewModel, ITravelExpensesService travelExpensesService) {
             _travelExpensesService = travelExpensesService;
-
+            
             Details = travelExpensesDetailsViewModel;
+            
             Date = DateOnly.FromDateTime(DateTime.Now);
         }
 
@@ -41,6 +45,7 @@ namespace DivinitySoftworks.Apps.TravelExpenses.UI.ViewModels {
                 return _details;
             }
             set {
+                value.Main = this;
                 ChangeAndNotify(ref _details, value);
             }
         }
@@ -89,15 +94,23 @@ namespace DivinitySoftworks.Apps.TravelExpenses.UI.ViewModels {
             }
         }
 
+        DateTime? _exported = null;
+        public DateTime? Exported {
+            get {
+                return _exported;
+            }
+            set {
+                ChangeAndNotify(ref _exported, value);
+            }
+        }
+
         public void AddMonths(int amount) {
             Date = Date.AddMonths(amount);
         }
 
-        public async Task UpdateStateAsync(DateItem dayItem) {
+        public Task UpdateStateAsync(DateItem dayItem) {
             dayItem.State = dayItem.State == Data.Enums.DayState.Office ? Data.Enums.DayState.Unset : Data.Enums.DayState.Office;
-            if (MonthlyData is null) return;
-            MonthlyData.Days = new ObservableCollection<DateItem>(Days.Where(d => d.State == Data.Enums.DayState.Office));
-            await _travelExpensesService.SaveAsync(MonthlyData);
+            return SaveAsync();
         }
 
         protected async override void OnPropertyChanged([CallerMemberName] string? propertyName = null) {
@@ -106,6 +119,8 @@ namespace DivinitySoftworks.Apps.TravelExpenses.UI.ViewModels {
             if (propertyName != nameof(Date)) return;
 
             MonthlyData = await _travelExpensesService.LoadAsync(Date.Year, Date.Month);
+
+            Exported = MonthlyData?.Exported ?? default(DateTime?);
 
             Days.Clear();
 
@@ -117,7 +132,6 @@ namespace DivinitySoftworks.Apps.TravelExpenses.UI.ViewModels {
                 DateItem dateItem = new() {
                     Date = dateTime,
                     State = MonthlyData?.Days.FirstOrDefault(i => i.Date == dateTime)?.State ?? Data.Enums.DayState.Unset
-
                 };
 
                 Days.Add(dateItem);
@@ -126,8 +140,17 @@ namespace DivinitySoftworks.Apps.TravelExpenses.UI.ViewModels {
             }
         }
 
-        public Task ExportAsync() {
-            return _travelExpensesService.ExportAsync(Date);
+        public async Task ExportAsync() {
+            if (MonthlyData is null) return;
+            Exported = MonthlyData.Exported = DateTime.Now;
+            await SaveAsync();
+            await _travelExpensesService.ExportAsync(Date);
+        }
+
+        private Task SaveAsync() {
+            if (MonthlyData is null) return Task.CompletedTask;
+            MonthlyData.Days = new ObservableCollection<DateItem>(Days.Where(d => d.State == Data.Enums.DayState.Office));
+            return _travelExpensesService.SaveAsync(MonthlyData);
         }
     }
 }
