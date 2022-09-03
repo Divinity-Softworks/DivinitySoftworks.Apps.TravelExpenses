@@ -162,6 +162,40 @@
                                     Cursor="Hand" BorderThickness="3" 
                                     BorderBrush="{Binding State, Converter={v:DayStateToBrushConverter PropertyType=Border}}" 
                                     MouseUp="OnDay_Clicked">
+                                <Border.ToolTip>
+                                    <Grid>
+                                        <Grid Visibility="{Binding State, Converter={converters:EnumToVisibilityConverter Visible={x:Static e:DayState.Unset}}}">
+                                            <Label>Not in the Office!</Label>
+                                        </Grid>
+                                        <Grid Visibility="{Binding State, Converter={converters:EnumToVisibilityConverter Visible={x:Static e:DayState.Weekend}}}">
+                                            <Label>Weekend!</Label>
+                                        </Grid>
+                                        <Grid Visibility="{Binding State, Converter={converters:EnumToVisibilityConverter Visible={x:Static e:DayState.Home}}}">
+                                            <Label>Working from Home!</Label>
+                                        </Grid>
+                                        <Grid Visibility="{Binding State, Converter={converters:EnumToVisibilityConverter Visible={x:Static e:DayState.Office}}}">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                            </Grid.RowDefinitions>
+                                            <Label Grid.Column="0" Grid.Row="0" Content="Home : " HorizontalContentAlignment="Right" Margin="0" Padding="0" />
+                                            <Label Grid.Column="0" Grid.Row="1" Content="Work : " HorizontalContentAlignment="Right" Margin="0" Padding="0"  />
+                                            <Label Grid.Column="0" Grid.Row="2" Content="Kilometers : " HorizontalContentAlignment="Right" Margin="0" Padding="0"  />
+                                            <Label Grid.Column="0" Grid.Row="3" Content="Price : " HorizontalContentAlignment="Right" Margin="0" Padding="0"  />
+                                            <Label Grid.Column="1" Grid.Row="0" Content="{Binding HomeAddress, Mode=OneWay}" Margin="0" Padding="0"  />
+                                            <Label Grid.Column="1" Grid.Row="1" Content="{Binding WorkAddress, Mode=OneWay}" Margin="0" Padding="0"  />
+                                            <Label Grid.Column="1" Grid.Row="2" Content="{Binding Kilometers, Mode=OneWay}" Margin="0" Padding="0"  />
+                                            <Label Grid.Column="1" Grid.Row="3" Content="{Binding Price, Mode=OneWay}" Margin="0" Padding="0"  />
+                                        </Grid>
+                                    </Grid>
+                                </Border.ToolTip>    
+                                
                                 <Border.Visibility>
                                     <MultiBinding Converter="{v:DateTimeToVisibilityConverter}">
                                         <Binding Path="DataContext.Date" RelativeSource="{RelativeSource Mode=Self}" />

@@ -1,4 +1,5 @@
 ﻿using DivinitySoftworks.Apps.Core.Data;
+using DivinitySoftworks.Apps.TravelExpenses.Core.Configuration;
 using DivinitySoftworks.Apps.TravelExpenses.Data.Models;
 using DivinitySoftworks.Apps.TravelExpenses.Services;
 using System;
@@ -29,8 +30,10 @@ namespace DivinitySoftworks.Apps.TravelExpenses.UI.ViewModels {
 
     public class TravelExpensesViewModel : ViewModel, ITravelExpensesViewModel {
         readonly ITravelExpensesService _travelExpensesService;
+        readonly IUserSettings _userSettings;
 
-        public TravelExpensesViewModel(ITravelExpensesDetailsViewModel travelExpensesDetailsViewModel, ITravelExpensesService travelExpensesService) {
+        public TravelExpensesViewModel(IUserSettings userSettings, ITravelExpensesDetailsViewModel travelExpensesDetailsViewModel, ITravelExpensesService travelExpensesService) {
+            _userSettings = userSettings;
             _travelExpensesService = travelExpensesService;
             
             Details = travelExpensesDetailsViewModel;
@@ -110,6 +113,7 @@ namespace DivinitySoftworks.Apps.TravelExpenses.UI.ViewModels {
 
         public Task UpdateStateAsync(DateItem dayItem) {
             dayItem.State = dayItem.State == Data.Enums.DayState.Office ? Data.Enums.DayState.Unset : Data.Enums.DayState.Office;
+            dayItem.Details = $"{_userSettings.HomeAddress}||{_userSettings.WorkAddress}||{_userSettings.Kilometers}||{_userSettings.Price}";
             return SaveAsync();
         }
 
@@ -118,26 +122,7 @@ namespace DivinitySoftworks.Apps.TravelExpenses.UI.ViewModels {
 
             if (propertyName != nameof(Date)) return;
 
-            MonthlyData = await _travelExpensesService.LoadAsync(Date.Year, Date.Month);
-
-            Exported = MonthlyData?.Exported ?? default(DateTime?);
-
-            Days.Clear();
-
-            DateTime dateTime = new DateTime(Year, Month, 1).Date;
-            while (dateTime.DayOfWeek is not DayOfWeek.Sunday)
-                dateTime = dateTime.AddDays(-1);
-
-            while (dateTime < new DateTime(Year, Month, 1).AddMonths(1).Date) {
-                DateItem dateItem = new() {
-                    Date = dateTime,
-                    State = MonthlyData?.Days.FirstOrDefault(i => i.Date == dateTime)?.State ?? Data.Enums.DayState.Unset
-                };
-
-                Days.Add(dateItem);
-
-                dateTime = dateTime.AddDays(1);
-            }
+            await LoadAsync();
         }
 
         public async Task ExportAsync() {
@@ -147,10 +132,46 @@ namespace DivinitySoftworks.Apps.TravelExpenses.UI.ViewModels {
             await _travelExpensesService.ExportAsync(Date);
         }
 
-        private Task SaveAsync() {
-            if (MonthlyData is null) return Task.CompletedTask;
-            MonthlyData.Days = new ObservableCollection<DateItem>(Days.Where(d => d.State == Data.Enums.DayState.Office));
-            return _travelExpensesService.SaveAsync(MonthlyData);
+        private async Task SaveAsync() {
+            try {
+                if (MonthlyData is null) return;
+                MonthlyData.Days = new ObservableCollection<DateItem>(Days.Where(d => d.State == Data.Enums.DayState.Office));
+                await _travelExpensesService.SaveAsync(MonthlyData);
+                return;
+            }
+            catch (Exception exception) {
+                // ToDo : Log 'exception'.
+                await LoadAsync();
+            }
+        }
+
+        private async Task LoadAsync() {
+            try {
+                MonthlyData = await _travelExpensesService.LoadAsync(Date.Year, Date.Month);
+
+                Exported = MonthlyData?.Exported ?? default(DateTime?);
+
+                Days.Clear();
+
+                DateTime dateTime = new DateTime(Year, Month, 1).Date;
+                while (dateTime.DayOfWeek is not DayOfWeek.Sunday)
+                    dateTime = dateTime.AddDays(-1);
+
+                while (dateTime < new DateTime(Year, Month, 1).AddMonths(1).Date) {
+                    DateItem dateItem = new() {
+                        Date = dateTime,
+                        State = MonthlyData?.Days.FirstOrDefault(i => i.Date == dateTime)?.State ?? Data.Enums.DayState.Unset,
+                        Details = MonthlyData?.Days.FirstOrDefault(i => i.Date == dateTime)?.Details ?? string.Empty
+                    };
+
+                    Days.Add(dateItem);
+
+                    dateTime = dateTime.AddDays(1);
+                }
+            }
+            catch (Exception exception) {
+                // ToDo : Log 'exception'.
+            }
         }
     }
 }
