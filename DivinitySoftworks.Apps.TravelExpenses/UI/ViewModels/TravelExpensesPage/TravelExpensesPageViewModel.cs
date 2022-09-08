@@ -8,9 +8,9 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
-namespace DivinitySoftworks.Apps.TravelExpenses.UI.ViewModels {
+namespace DivinitySoftworks.Apps.TravelExpenses.UI.ViewModels.TravelExpensesPage {
 
-    public interface ITravelExpensesViewModel {
+    public interface ITravelExpensesPageViewModel : IMainDetailContentViewModel<ITravelExpensesPageViewModel, ITravelExpensesPageDetailsViewModel> {
         int Year { get; }
 
         int Month { get; }
@@ -19,8 +19,6 @@ namespace DivinitySoftworks.Apps.TravelExpenses.UI.ViewModels {
 
         DateTime? Exported { get; }
 
-        ITravelExpensesDetailsViewModel Details { get; }
-
         void AddMonths(int amount);
 
         Task UpdateStateAsync(DateItem dayItem);
@@ -28,31 +26,18 @@ namespace DivinitySoftworks.Apps.TravelExpenses.UI.ViewModels {
         Task ExportAsync();
     }
 
-    public class TravelExpensesViewModel : ViewModel, ITravelExpensesViewModel {
+    public class TravelExpensesPageViewModel : MainDetailContentViewModel<ITravelExpensesPageViewModel, ITravelExpensesPageDetailsViewModel>, ITravelExpensesPageViewModel {
+        readonly ILogService _logService;
         readonly ITravelExpensesService _travelExpensesService;
         readonly IUserSettings _userSettings;
 
-        public TravelExpensesViewModel(IUserSettings userSettings, ITravelExpensesDetailsViewModel travelExpensesDetailsViewModel, ITravelExpensesService travelExpensesService) {
+        public TravelExpensesPageViewModel(ILogService logService, IUserSettings userSettings, ITravelExpensesService travelExpensesService) {
+            _logService = logService;
             _userSettings = userSettings;
             _travelExpensesService = travelExpensesService;
             
-            Details = travelExpensesDetailsViewModel;
-            
             Date = DateOnly.FromDateTime(DateTime.Now);
         }
-
-        ITravelExpensesDetailsViewModel? _details;
-        public ITravelExpensesDetailsViewModel Details {
-            get {
-                if (_details is null) throw new NullReferenceException(nameof(Details));
-                return _details;
-            }
-            set {
-                value.Main = this;
-                ChangeAndNotify(ref _details, value);
-            }
-        }
-
 
         DateOnly _date = DateOnly.MinValue;
         public DateOnly Date {
@@ -140,7 +125,8 @@ namespace DivinitySoftworks.Apps.TravelExpenses.UI.ViewModels {
                 return;
             }
             catch (Exception exception) {
-                // ToDo : Log 'exception'.
+                _logService.LogException(exception, "An error occurred while trying to save the data.");
+
                 await LoadAsync();
             }
         }
@@ -170,7 +156,7 @@ namespace DivinitySoftworks.Apps.TravelExpenses.UI.ViewModels {
                 }
             }
             catch (Exception exception) {
-                // ToDo : Log 'exception'.
+                _logService.LogException(exception, "An error occurred while trying to load the data.");
             }
         }
     }

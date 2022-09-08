@@ -1,9 +1,12 @@
-﻿namespace DivinitySoftworks.Apps.TravelExpenses.Data.Enums {
+﻿using System;
+
+namespace DivinitySoftworks.Apps.TravelExpenses.Data.Enums {
+    [Flags]
     public enum LogState {
-        Initial,
-        Success,
-        Info,
-        Warning,
-        Error,
+        Initial = 0,
+        Success = 1,
+        Info = 2,
+        Warning = 4,
+        Error = 8,
     }
 }

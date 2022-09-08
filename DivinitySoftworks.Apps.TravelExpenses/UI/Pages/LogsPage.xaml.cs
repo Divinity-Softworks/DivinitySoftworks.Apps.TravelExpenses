@@ -1,12 +1,18 @@
-﻿using DivinitySoftworks.Apps.TravelExpenses.UI.Pages.Base;
+﻿using DivinitySoftworks.Apps.TravelExpenses.UI.ViewModels.LogsPage;
 
 namespace DivinitySoftworks.Apps.TravelExpenses.UI.Pages {
-    /// <summary>
-    /// Interaction logic for LogsPage.xaml
-    /// </summary>
-    public partial class LogsPage : ContentPage {
-        public LogsPage() {
+
+    public partial class LogsPage : Base.ContentPage {
+        public LogsPage(ILogsPageCollectionViewModel collectionViewModel) {
             InitializeComponent();
+
+            DataContext = collectionViewModel.Main;
+        }
+
+        public ILogsPageViewModel ViewModel {
+            get {
+                return (ILogsPageViewModel)DataContext;
+            }
         }
     }
 }

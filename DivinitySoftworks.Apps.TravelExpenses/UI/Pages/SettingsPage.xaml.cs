@@ -1,8 +1,7 @@
-﻿using DivinitySoftworks.Apps.TravelExpenses.UI.Pages.Base;
-using DivinitySoftworks.Apps.TravelExpenses.UI.ViewModels;
+﻿using DivinitySoftworks.Apps.TravelExpenses.UI.ViewModels;
 
 namespace DivinitySoftworks.Apps.TravelExpenses.UI.Pages {
-    public partial class SettingsPage : ContentPage {
+    public partial class SettingsPage : Base.ContentPage {
         public SettingsPage(ISettingsPageViewModel settingsPageViewModel) {
             InitializeComponent();
 

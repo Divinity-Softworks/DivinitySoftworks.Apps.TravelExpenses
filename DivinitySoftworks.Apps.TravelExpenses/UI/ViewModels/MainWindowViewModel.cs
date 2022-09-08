@@ -2,13 +2,14 @@
 using DivinitySoftworks.Apps.Core.Data;
 using DivinitySoftworks.Apps.TravelExpenses.Data.Models;
 using DivinitySoftworks.Apps.TravelExpenses.Services;
-using DivinitySoftworks.Apps.TravelExpenses.UI.Pages;
-using DivinitySoftworks.Apps.TravelExpenses.UI.Pages.Base;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Controls;
+
+using Pages = DivinitySoftworks.Apps.TravelExpenses.UI.Pages;
 
 namespace DivinitySoftworks.Apps.TravelExpenses.UI.ViewModels {
 
@@ -16,7 +17,7 @@ namespace DivinitySoftworks.Apps.TravelExpenses.UI.ViewModels {
 
         string Name { get; set; }
 
-        ContentPage? Page { get; set; }
+        Page? Page { get; set; }
 
         void SetPage(Type target);
 
@@ -27,17 +28,17 @@ namespace DivinitySoftworks.Apps.TravelExpenses.UI.ViewModels {
         readonly IConfigurationManager _configurationManager;
         readonly ILogService _logService;
 
-        readonly Dictionary<Type, ContentPage> _pages = new();
+        readonly Dictionary<Type, Page> _pages = new();
 
-        public MainWindowViewModel(IConfigurationManager configurationManager, ILogService logService, TravelExpensesPage traveExpensesPage, LogsPage logsPage, SettingsPage settingsPage) {
+        public MainWindowViewModel(IConfigurationManager configurationManager, ILogService logService, Pages.TravelExpensesPage traveExpensesPage, Pages.LogsPage logsPage, Pages.SettingsPage settingsPage) {
             _configurationManager = configurationManager;
             _configurationManager.OnConfigurationChanged += ConfigurationManager_OnConfigurationChanged;
 
             _logService = logService;
 
-            _pages.Add(typeof(TravelExpensesPage), traveExpensesPage);
-            _pages.Add(typeof(LogsPage), logsPage);
-            _pages.Add(typeof(SettingsPage), settingsPage);
+            _pages.Add(typeof(Pages.TravelExpensesPage), traveExpensesPage);
+            _pages.Add(typeof(Pages.LogsPage), logsPage);
+            _pages.Add(typeof(Pages.SettingsPage), settingsPage);
 
             Page = traveExpensesPage;
         }
@@ -53,8 +54,8 @@ namespace DivinitySoftworks.Apps.TravelExpenses.UI.ViewModels {
             }
         }
 
-        ContentPage? _page;
-        public ContentPage? Page {
+        Page? _page;
+        public Page? Page {
             get {
                 return _page;
             }
@@ -89,7 +90,7 @@ namespace DivinitySoftworks.Apps.TravelExpenses.UI.ViewModels {
             Name = name ?? "Mystery Guest";
 
             if (string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(department) || string.IsNullOrWhiteSpace(manager) || string.IsNullOrWhiteSpace(workAddress) || string.IsNullOrWhiteSpace(homeAddress) || kilometers is null || price is null)
-                SetPage(typeof(SettingsPage));
+                SetPage(typeof(Pages.SettingsPage));
         }
 
         private async void ConfigurationManager_OnConfigurationChanged(object? sender, ConfigurationChangedEventArgs e) {

@@ -1,11 +1,10 @@
-﻿using DivinitySoftworks.Apps.Core.Configuration.Managers;
+﻿using DivinitySoftworks.Apps.Core.Diagnostics;
 using DivinitySoftworks.Apps.TravelExpenses.Core.Configuration;
 using DivinitySoftworks.Apps.TravelExpenses.Data.Models;
 using Newtonsoft.Json;
 using Syncfusion.XlsIO;
 using System;
 using System.IO;
-using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -21,13 +20,17 @@ namespace DivinitySoftworks.Apps.TravelExpenses.Services {
     }
 
     public class TravelExpensesService : ITravelExpensesService {
+        readonly IAppSettings _appSettings;
+        readonly ILogService _logService;
         readonly IUserSettings _userSettings;
         readonly DirectoryInfo _directoryInfo;
 
-        public TravelExpensesService(IAppSettings appSettings, IUserSettings userSettings) {
+        public TravelExpensesService(IAppSettings appSettings, ILogService logService, IUserSettings userSettings) {
+            _appSettings = appSettings;
+            _logService = logService;
             _userSettings = userSettings;
 
-            _directoryInfo = new DirectoryInfo(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Divinity Softworks", "Travel Expenses", appSettings.DataPath));
+            _directoryInfo = new DirectoryInfo(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Divinity Softworks", "Travel Expenses"));
             if (!_directoryInfo.Exists) _directoryInfo.Create();
         }
 
@@ -102,7 +105,7 @@ namespace DivinitySoftworks.Apps.TravelExpenses.Services {
                     worksheet.Range["J8"].Text = "Number of KM";
                     worksheet.Range["A8:K8"].CellStyle.Font.Bold = true;
                     worksheet.Range["A8:K8"].HorizontalAlignment = ExcelHAlign.HAlignCenter;
-                    
+
                     worksheet.Range["B8:E8"].Merge();
                     worksheet.Range["F8:I8"].Merge();
                     worksheet.Range["J8:K8"].Merge();
@@ -139,7 +142,7 @@ namespace DivinitySoftworks.Apps.TravelExpenses.Services {
                     row++;
 
                     worksheet.Range[$"F{row}"].Text = "Total Kilometers : ";
-                    worksheet.Range[$"J{row}"].Formula = $"=SUM(J9:K{row-2})";
+                    worksheet.Range[$"J{row}"].Formula = $"=SUM(J9:K{row - 2})";
                     worksheet.Range[$"F{row}:I{row}"].Merge();
                     worksheet.Range[$"J{row}:K{row}"].Merge();
                     row++;
@@ -183,11 +186,24 @@ namespace DivinitySoftworks.Apps.TravelExpenses.Services {
                         IPictureShape shape = worksheet.Pictures.AddPicture(1, 9, 7, 12, stream);
                     }
 
-                    using FileStream fileStream = new(@$"C:\Users\m.keeman\Desktop\New folder\{DateTime.Now.ToFileTime()}.xlsx", FileMode.Create);
+                    DirectoryInfo directoryInfo = new(Path.Combine(_directoryInfo.FullName, _appSettings.ExportsPath));
+                    if (!directoryInfo.Exists) directoryInfo.Create();
+
+                    string fileName = Path.Combine(directoryInfo.FullName, $"{date:yyyy.MM} Travel Expenses.xlsx");
+
+                    using FileStream fileStream = new(fileName, FileMode.Create);
                     workbook.SaveAs(fileStream);
+
+                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo() {
+                        FileName = directoryInfo.FullName,
+                        UseShellExecute = true,
+                        Verb = ProcessStartVerb.Open
+                    });
+
+                    _logService.LogSuccess("Export successful.", $"The infomation for {date:MMMM yyyy} has been exported successully to: {fileName}.");
                 }
                 catch (Exception exception) {
-                    throw;
+                    _logService.LogException(exception, "An error occurred while trying to export the data.");
                 }
             });
         }
@@ -198,8 +214,8 @@ namespace DivinitySoftworks.Apps.TravelExpenses.Services {
                 if (year < 2000 || year > 2100) return null;
                 if (month < 1 || month > 12) return null;
 
-                DirectoryInfo directoryInfo = new(_directoryInfo.FullName);
-                if (!directoryInfo.Exists) _directoryInfo.Create();
+                DirectoryInfo directoryInfo = new(Path.Combine(_directoryInfo.FullName, _appSettings.DataPath));
+                if (!directoryInfo.Exists) directoryInfo.Create();
                 FileInfo fileInfo = new(Path.Combine(directoryInfo.FullName, $"{year}{month.ToString().PadLeft(2, '0')}.dsdata"));
                 if (!fileInfo.Exists) return new MonthlyData(year, month);
 
@@ -210,7 +226,7 @@ namespace DivinitySoftworks.Apps.TravelExpenses.Services {
         /// <inheritdoc/>
         public Task SaveAsync(MonthlyData monthlyData) {
             return Task.Run(() => {
-                DirectoryInfo directoryInfo = new(_directoryInfo.FullName);
+                DirectoryInfo directoryInfo = new(Path.Combine(_directoryInfo.FullName, _appSettings.DataPath));
                 if (!directoryInfo.Exists) directoryInfo.Create();
                 FileInfo fileInfo = new(Path.Combine(directoryInfo.FullName, $"{monthlyData.Year}{monthlyData.Month.ToString().PadLeft(2, '0')}.dsdata"));
 
@@ -221,9 +237,9 @@ namespace DivinitySoftworks.Apps.TravelExpenses.Services {
         private byte[]? LoadImage() {
             if (Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) is not string directory)
                 return default;
-            
+
             FileInfo imageFile = new(Path.Combine(directory, "Resources", "Company Logo.jpg"));
-            if (!imageFile.Exists) 
+            if (!imageFile.Exists)
                 return default;
 
             return File.ReadAllBytes(imageFile.FullName);

@@ -1,112 +1,15 @@
 ﻿<b:ContentPage x:Class="DivinitySoftworks.Apps.TravelExpenses.UI.Pages.TravelExpensesPage" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-               x:Name="_ContentPage"
                xmlns:b="clr-namespace:DivinitySoftworks.Apps.TravelExpenses.UI.Pages.Base"
                xmlns:v="clr-namespace:DivinitySoftworks.Apps.TravelExpenses.UI.Converters"   
                xmlns:e="clr-namespace:DivinitySoftworks.Apps.TravelExpenses.Data.Enums"   
-               xmlns:components="clr-namespace:DivinitySoftworks.Apps.Core.Components;assembly=DivinitySoftworks.Apps.Core"  
                xmlns:converters="clr-namespace:DivinitySoftworks.Apps.Core.Converters;assembly=DivinitySoftworks.Apps.Core"                 
+               xmlns:details="clr-namespace:DivinitySoftworks.Apps.TravelExpenses.UI.Details"
                TextOptions.TextFormattingMode="Display" TextOptions.TextHintingMode="Animated" TextOptions.TextRenderingMode="ClearType" UseLayoutRounding="True"
                mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800" 
                Focusable="False" FontFamily="{StaticResource Fonts.Primary}"
                Title="{Binding Title}">
     <b:ContentPage.DetailsContent>
-        <Grid Focusable="False" Margin="32 0" DataContext="{Binding Path=DataContext.Page.DataContext.Details, RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="32" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="64" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="32" />
-            </Grid.RowDefinitions>
-            <Label Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" FontSize="32" FontWeight="Bold" Content="Stats" Margin="0 0 0 18" />
-            <components:ToggleButton Grid.Row="2" Grid.Column="0" 
-                                     Toggled="{StaticResource Brushes.Sand}" IsToggled="{Binding CalendarRange, Converter={converters:EnumToBooleanConverter True={x:Static e:CalendarRange.Month}}}" 
-                                     Value="{x:Static e:CalendarRange.Month}"
-                                     CornerRadius="18" Click="OnToggleButtonClick">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <components:ToggleLabel Grid.Row="0" Margin="0" 
-                                            Foreground="{StaticResource Brushes.Gray}" FontSize="11"
-                                            Toggled="{StaticResource Brushes.Pink}" IsToggled="{Binding CalendarRange, Converter={converters:EnumToBooleanConverter True={x:Static e:CalendarRange.Month}}}" 
-                                            HorizontalAlignment="Center" VerticalAlignment="Bottom">M O N T H</components:ToggleLabel>
-                    <Label Grid.Row="1" Margin="0 -18 0 0" FontSize="28"
-                           Foreground="{StaticResource Brushes.Pink}"
-                           Visibility="{Binding CalendarRange, Converter={converters:EnumToVisibilityConverter Visible={x:Static e:CalendarRange.Month}}}"
-                           HorizontalAlignment="Center" VerticalAlignment="Top">.</Label>
-                </Grid>
-            </components:ToggleButton>
-            <components:ToggleButton Grid.Row="2" Grid.Column="1" 
-                                     Toggled="{StaticResource Brushes.Sand}" IsToggled="{Binding CalendarRange, Converter={converters:EnumToBooleanConverter True={x:Static e:CalendarRange.Year}}}"
-                                     Value="{x:Static e:CalendarRange.Year}"
-                                     CornerRadius="18" Click="OnToggleButtonClick">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <components:ToggleLabel Grid.Row="0" Margin="0" 
-                                            Foreground="{StaticResource Brushes.Gray}" FontSize="11"
-                                            Toggled="{StaticResource Brushes.Pink}" IsToggled="{Binding CalendarRange, Converter={converters:EnumToBooleanConverter True={x:Static e:CalendarRange.Year}}}" 
-                                            HorizontalAlignment="Center" VerticalAlignment="Bottom">Y E A R</components:ToggleLabel>
-                    <Label Grid.Row="1" Margin="0 -18 0 0" FontSize="28"
-                           Foreground="{StaticResource Brushes.Pink}"
-                           Visibility="{Binding CalendarRange, Converter={converters:EnumToVisibilityConverter Visible={x:Static e:CalendarRange.Year}}}"
-                           HorizontalAlignment="Center" VerticalAlignment="Top">.</Label>
-                </Grid>
-            </components:ToggleButton>
-            <components:ToggleButton Grid.Row="2" Grid.Column="2" 
-                                     Toggled="{StaticResource Brushes.Sand}" 
-                                     IsToggled="{Binding CalendarRange, Converter={converters:EnumToBooleanConverter True={x:Static e:CalendarRange.All}}}" 
-                                     Value="{x:Static e:CalendarRange.All}"
-                                     CornerRadius="18" Click="OnToggleButtonClick">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <components:ToggleLabel Grid.Row="0" Margin="0" 
-                                            Foreground="{StaticResource Brushes.Gray}" FontSize="11"
-                                            Toggled="{StaticResource Brushes.Pink}"
-                                            IsToggled="{Binding CalendarRange, Converter={converters:EnumToBooleanConverter True={x:Static e:CalendarRange.All}}}" 
-                                            HorizontalAlignment="Center" VerticalAlignment="Bottom">A L L</components:ToggleLabel>
-                    <Label Grid.Row="1" Margin="0 -18 0 0" 
-                           Foreground="{StaticResource Brushes.Pink}" FontSize="28"
-                           Visibility="{Binding CalendarRange, Converter={converters:EnumToVisibilityConverter Visible={x:Static e:CalendarRange.All}}}"
-                           HorizontalAlignment="Center" VerticalAlignment="Top">.</Label>
-                </Grid>
-            </components:ToggleButton>
-
-            <Border Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Background="Transparent" CornerRadius="32" Height="128"
-                    BorderBrush="{StaticResource Brushes.Sand}"
-                    BorderThickness="2">
-                <Grid>
-                    <Viewbox HorizontalAlignment="Left" Margin="32 8 8 8" Opacity="0.5">
-                        <Canvas Width="24" Height="24">
-                            <Path Fill="{StaticResource Brushes.Sand}" Data="M21.17 3.25Q21.5 3.25 21.76 3.5 22 3.74 22 4.08V19.92Q22 20.26 21.76 20.5 21.5 20.75 21.17 20.75H7.83Q7.5 20.75 7.24 20.5 7 20.26 7 19.92V17H2.83Q2.5 17 2.24 16.76 2 16.5 2 16.17V7.83Q2 7.5 2.24 7.24 2.5 7 2.83 7H7V4.08Q7 3.74 7.24 3.5 7.5 3.25 7.83 3.25M7 13.06L8.18 15.28H9.97L8 12.06L9.93 8.89H8.22L7.13 10.9L7.09 10.96L7.06 11.03Q6.8 10.5 6.5 9.96 6.25 9.43 5.97 8.89H4.16L6.05 12.08L4 15.28H5.78M13.88 19.5V17H8.25V19.5M13.88 15.75V12.63H12V15.75M13.88 11.38V8.25H12V11.38M13.88 7V4.5H8.25V7M20.75 19.5V17H15.13V19.5M20.75 15.75V12.63H15.13V15.75M20.75 11.38V8.25H15.13V11.38M20.75 7V4.5H15.13V7Z" />
-                        </Canvas>
-                    </Viewbox>
-                    <StackPanel HorizontalAlignment="Right" Margin="8">
-                        <Label HorizontalContentAlignment="Right" Margin="20 5 20 0"
-                               FontSize="10">EXPORTED ON</Label>
-                        <Label HorizontalContentAlignment="Right" Margin="0"
-                               FontSize="22" FontWeight="Bold">
-                            <TextBlock TextWrapping="Wrap" TextAlignment="Right" Text="{Binding Path=Main.Exported, Converter={converters:DateTimeToStringConverter}, FallbackValue='Not Exported Yet'}" />
-                        </Label>
-                    </StackPanel>
-                    <Button Height="44" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0 0 28 -20"
-                            Click="OnExport" Content="Export Now" />
-                </Grid>
-            </Border>
-        </Grid>
+        <details:TravelExpensesPageDetails />
     </b:ContentPage.DetailsContent>
     <Grid Background="Transparent" Focusable="False">
         <Grid.ColumnDefinitions>
