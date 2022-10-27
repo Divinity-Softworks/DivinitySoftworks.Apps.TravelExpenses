@@ -29,7 +29,7 @@ namespace DivinitySoftworks.Apps.TravelExpenses.Services {
         void LogSuccess(string message, string details);
     }
 
-    public class LogService : ILogService {
+    internal sealed class LogService : ILogService {
         readonly static int _maxItems = 500;
 
         readonly FileInfo _fileInfo;
@@ -48,7 +48,7 @@ namespace DivinitySoftworks.Apps.TravelExpenses.Services {
             if (!_fileInfo.Exists) return;
 
             LogItems = JsonConvert.DeserializeObject<FixedObservableCollection<LogItem>>(await File.ReadAllTextAsync(_fileInfo.FullName)) ?? new FixedObservableCollection<LogItem>(_maxItems);
-
+            LogItems.Capacity = _maxItems;
             OnLogsChanged?.Invoke(this, new EventArgs());
         }
 

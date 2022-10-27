@@ -23,5 +23,13 @@ namespace DivinitySoftworks.Apps.TravelExpenses.UI.Details {
             if (ViewModel.ContentGroup.Main is null) return;
             await ViewModel.ContentGroup.Main.ExportAsync();
         }
+
+        private async void OnLoaded(object sender, RoutedEventArgs e) {
+            await ViewModel.LoadAsync();
+        }
+
+        private void OnUnloaded(object sender, RoutedEventArgs e) {
+            ViewModel.Dispose();
+        }
     }
 }

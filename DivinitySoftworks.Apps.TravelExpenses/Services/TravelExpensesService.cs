@@ -6,6 +6,7 @@ using Syncfusion.XlsIO;
 using System;
 using System.IO;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace DivinitySoftworks.Apps.TravelExpenses.Services {
@@ -19,7 +20,7 @@ namespace DivinitySoftworks.Apps.TravelExpenses.Services {
         Task ExportAsync(DateOnly date);
     }
 
-    public class TravelExpensesService : ITravelExpensesService {
+    internal class TravelExpensesService : ITravelExpensesService {
         readonly IAppSettings _appSettings;
         readonly ILogService _logService;
         readonly IUserSettings _userSettings;
@@ -219,7 +220,20 @@ namespace DivinitySoftworks.Apps.TravelExpenses.Services {
                 FileInfo fileInfo = new(Path.Combine(directoryInfo.FullName, $"{year}{month.ToString().PadLeft(2, '0')}.dsdata"));
                 if (!fileInfo.Exists) return new MonthlyData(year, month);
 
-                return JsonConvert.DeserializeObject<MonthlyData>(File.ReadAllText(fileInfo.FullName));
+                string data = string.Empty;
+
+                using (FileStream fileStream = File.Open(fileInfo.FullName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {
+                    byte[] bytes = new byte[10240];
+                    UTF8Encoding encoding = new(true);
+
+                    while (fileStream.Read(bytes, 0, bytes.Length) > 0)
+                        data += encoding.GetString(bytes);
+                }
+
+                if (string.IsNullOrEmpty(data.Trim()))
+                    File.Delete(fileInfo.FullName);
+
+                return JsonConvert.DeserializeObject<MonthlyData>(data);
             });
         }
 
@@ -229,8 +243,14 @@ namespace DivinitySoftworks.Apps.TravelExpenses.Services {
                 DirectoryInfo directoryInfo = new(Path.Combine(_directoryInfo.FullName, _appSettings.DataPath));
                 if (!directoryInfo.Exists) directoryInfo.Create();
                 FileInfo fileInfo = new(Path.Combine(directoryInfo.FullName, $"{monthlyData.Year}{monthlyData.Month.ToString().PadLeft(2, '0')}.dsdata"));
+                
+                if (File.Exists(fileInfo.FullName)) 
+                    File.Delete(fileInfo.FullName);
 
-                File.WriteAllText(fileInfo.FullName, JsonConvert.SerializeObject(monthlyData, Formatting.Indented));
+                using (FileStream fileStream = File.Open(fileInfo.FullName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.ReadWrite)) {
+                    byte[] data = new UTF8Encoding(true).GetBytes(JsonConvert.SerializeObject(monthlyData, Formatting.Indented));
+                    fileStream.Write(data, 0, data.Length);
+                }
             });
         }
 

@@ -33,6 +33,7 @@ namespace DivinitySoftworks.Apps.TravelExpenses {
         override protected void ConfigureServices(IServiceCollection services) {
             base.ConfigureServices(services);
             services.AddSingleton<ILogService, LogService>();
+            services.AddSingleton<IStaticsService, StaticsService>();
             services.AddSingleton<ITravelExpensesService, TravelExpensesService>();
 
             services.AddMediatR(typeof(App));

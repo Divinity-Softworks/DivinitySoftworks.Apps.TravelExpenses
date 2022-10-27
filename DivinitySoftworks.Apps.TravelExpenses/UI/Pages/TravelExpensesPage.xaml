@@ -93,8 +93,8 @@
                                             <Label Grid.Column="0" Grid.Row="3" Content="Price : " HorizontalContentAlignment="Right" Margin="0" Padding="0"  />
                                             <Label Grid.Column="1" Grid.Row="0" Content="{Binding HomeAddress, Mode=OneWay}" Margin="0" Padding="0"  />
                                             <Label Grid.Column="1" Grid.Row="1" Content="{Binding WorkAddress, Mode=OneWay}" Margin="0" Padding="0"  />
-                                            <Label Grid.Column="1" Grid.Row="2" Content="{Binding Kilometers, Mode=OneWay}" Margin="0" Padding="0"  />
-                                            <Label Grid.Column="1" Grid.Row="3" Content="{Binding Price, Mode=OneWay}" Margin="0" Padding="0"  />
+                                            <Label Grid.Column="1" Grid.Row="2" Content="{Binding Kilometers, Mode=OneWay}" ContentStringFormat="{}{0} * 2" Margin="0" Padding="0"  />
+                                            <Label Grid.Column="1" Grid.Row="3" Content="{Binding Price, Mode=OneWay}" ContentStringFormat="{}{0:C}" Language="nl-NL" Margin="0" Padding="0"  />
                                         </Grid>
                                     </Grid>
                                 </Border.ToolTip>    

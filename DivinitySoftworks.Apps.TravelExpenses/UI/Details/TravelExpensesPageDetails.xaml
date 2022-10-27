@@ -1,8 +1,9 @@
 ﻿<local:TravelExpensesPageBaseDetails x:Class="DivinitySoftworks.Apps.TravelExpenses.UI.Details.TravelExpensesPageDetails" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:local="clr-namespace:DivinitySoftworks.Apps.TravelExpenses.UI.Details"
                                      xmlns:e="clr-namespace:DivinitySoftworks.Apps.TravelExpenses.Data.Enums"   
+                                     xmlns:v="clr-namespace:DivinitySoftworks.Apps.TravelExpenses.UI.Converters"   
                                      xmlns:components="clr-namespace:DivinitySoftworks.Apps.Core.Components;assembly=DivinitySoftworks.Apps.Core"  
                                      xmlns:converters="clr-namespace:DivinitySoftworks.Apps.Core.Converters;assembly=DivinitySoftworks.Apps.Core"   
-                                     mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800">
+                                     mc:Ignorable="d" d:DesignHeight="450" d:DesignWidth="800" Loaded="OnLoaded" Unloaded="OnUnloaded">
     <Grid Focusable="False" Margin="32 0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -78,6 +79,58 @@
             </Grid>
         </components:ToggleButton>
 
+        <Grid Grid.Column="0" Grid.ColumnSpan="3"
+              Grid.Row="3">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="64" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="32" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Viewbox Grid.Row="1" 
+                     Width="64" Height="64" 
+                     HorizontalAlignment="Left" VerticalAlignment="Top">
+                <Canvas Width="24" Height="24">
+                    <Path Fill="{StaticResource Brushes.Sand}" Data="M12,16A3,3 0 0,1 9,13C9,11.88 9.61,10.9 10.5,10.39L20.21,4.77L14.68,14.35C14.18,15.33 13.17,16 12,16M12,3C13.81,3 15.5,3.5 16.97,4.32L14.87,5.53C14,5.19 13,5 12,5A8,8 0 0,0 4,13C4,15.21 4.89,17.21 6.34,18.65H6.35C6.74,19.04 6.74,19.67 6.35,20.06C5.96,20.45 5.32,20.45 4.93,20.07V20.07C3.12,18.26 2,15.76 2,13A10,10 0 0,1 12,3M22,13C22,15.76 20.88,18.26 19.07,20.07V20.07C18.68,20.45 18.05,20.45 17.66,20.06C17.27,19.67 17.27,19.04 17.66,18.65V18.65C19.11,17.2 20,15.21 20,13C20,12 19.81,11 19.46,10.1L20.67,8C21.5,9.5 22,11.18 22,13Z" />
+                </Canvas>
+            </Viewbox>
+            <Label Grid.Row="1"
+                   FontSize="32"
+                   Margin="32 24"
+                   ContentStringFormat="{}{0} KM" Language="nl-NL">
+                <Label.Content>
+                    <MultiBinding Converter="{v:StaticsListToAmountConverter}">
+                        <Binding Path="DataContext.Statics" RelativeSource="{RelativeSource AncestorType={x:Type local:TravelExpensesPageBaseDetails}}" />
+                        <Binding Path="DataContext.ContentGroup.Main.Date" RelativeSource="{RelativeSource AncestorType={x:Type local:TravelExpensesPageBaseDetails}}" />
+                        <Binding Path="DataContext.CalendarRange" RelativeSource="{RelativeSource AncestorType={x:Type local:TravelExpensesPageBaseDetails}}" />
+                        <Binding Source="{x:Static e:StaticType.Kilometers}" Mode="OneWay"/>
+                    </MultiBinding>
+                </Label.Content>
+            </Label>
+            <Viewbox Grid.Row="3" 
+                     Width="64" Height="64"
+                     HorizontalAlignment="Right" VerticalAlignment="Top">
+                <Canvas Width="24" Height="24">
+                    <Path Fill="{StaticResource Brushes.Sand}" Data="M15 18.5C12.5 18.5 10.32 17.08 9.24 15H15L16 13H8.58C8.53 12.67 8.5 12.34 8.5 12S8.53 11.33 8.58 11H15L16 9H9.24C10.32 6.92 12.5 5.5 15 5.5C16.61 5.5 18.09 6.09 19.23 7.07L21 5.3C19.41 3.87 17.3 3 15 3C11.08 3 7.76 5.5 6.5 9H3L2 11H6.06C6 11.33 6 11.66 6 12S6 12.67 6.06 13H3L2 15H6.5C7.76 18.5 11.08 21 15 21C17.31 21 19.41 20.13 21 18.7L19.22 16.93C18.09 17.91 16.62 18.5 15 18.5Z" />
+                </Canvas>
+            </Viewbox>
+            <Label Grid.Row="3"
+                   FontSize="32"
+                   Margin="32 24"
+                   HorizontalContentAlignment="Right"
+                   ContentStringFormat="{}{0:C}" Language="nl-NL">
+                <Label.Content>
+                    <MultiBinding Converter="{v:StaticsListToAmountConverter}">
+                        <Binding Path="DataContext.Statics" RelativeSource="{RelativeSource AncestorType={x:Type local:TravelExpensesPageBaseDetails}}" />
+                        <Binding Path="DataContext.ContentGroup.Main.Date" RelativeSource="{RelativeSource AncestorType={x:Type local:TravelExpensesPageBaseDetails}}" />
+                        <Binding Path="DataContext.CalendarRange" RelativeSource="{RelativeSource AncestorType={x:Type local:TravelExpensesPageBaseDetails}}" />
+                        <Binding Source="{x:Static e:StaticType.Price}" Mode="OneWay"/>
+                    </MultiBinding>
+                </Label.Content>
+            </Label>
+        </Grid>
+        
         <Border Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Background="Transparent" CornerRadius="32" Height="128"
                 BorderBrush="{StaticResource Brushes.Sand}"
                 BorderThickness="2">

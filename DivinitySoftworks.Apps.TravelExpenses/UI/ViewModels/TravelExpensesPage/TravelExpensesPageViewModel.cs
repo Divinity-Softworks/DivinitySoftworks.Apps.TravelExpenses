@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 namespace DivinitySoftworks.Apps.TravelExpenses.UI.ViewModels.TravelExpensesPage {
 
     public interface ITravelExpensesPageViewModel : IMainDetailContentViewModel<ITravelExpensesPageViewModel, ITravelExpensesPageDetailsViewModel> {
+
+        DateOnly Date { get; set; }
+
         int Year { get; }
 
         int Month { get; }

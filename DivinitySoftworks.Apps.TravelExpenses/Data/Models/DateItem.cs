@@ -56,10 +56,10 @@ namespace DivinitySoftworks.Apps.TravelExpenses.Data.Models {
         }
 
         [JsonIgnore]
-        public string Price {
+        public double Price {
             get {
-                if (string.IsNullOrWhiteSpace(_details)) return string.Empty;
-                return $"€ {_details.Split("||")[3]}";
+                if (string.IsNullOrWhiteSpace(_details)) return 0.00;
+                return double.Parse($"{_details.Split("||")[3]}");
             }
         }
     }

@@ -1,8 +1,7 @@
 ﻿namespace DivinitySoftworks.Apps.TravelExpenses.Data.Enums {
-    public enum CalendarRange {
+    internal enum StaticType {
         Unset,
-        Month,
-        Year,
-        All
+        Kilometers,
+        Price
     }
 }
