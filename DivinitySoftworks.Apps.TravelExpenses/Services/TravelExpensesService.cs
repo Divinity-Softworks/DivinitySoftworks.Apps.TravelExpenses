@@ -255,7 +255,7 @@ namespace DivinitySoftworks.Apps.TravelExpenses.Services {
         }
 
         private byte[]? LoadImage() {
-            if (Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) is not string directory)
+            if (Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory) is not string directory)
                 return default;
 
             FileInfo imageFile = new(Path.Combine(directory, "Resources", "Company Logo.jpg"));

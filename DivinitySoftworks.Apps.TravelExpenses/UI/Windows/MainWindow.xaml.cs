@@ -4,7 +4,7 @@ using System;
 using System.Windows;
 
 namespace DivinitySoftworks.Apps.TravelExpenses.UI.Windows {
-    
+
     public partial class MainWindow : Window {
         public MainWindow(IMainWindowViewModel mainWindowViewModel) {
             InitializeComponent();

@@ -26,7 +26,7 @@ namespace DivinitySoftworks.Apps.TravelExpenses.UI.Converters {
 
             switch (calendarRange) {
                 case CalendarRange.Month:
-                    value = staticsItems.Where(s => s.DateTime.Month == dateOnly.Month).Sum(s => (staticType == StaticType.Kilometers) ? s.Kilometers : s.Price) ?? 0;
+                    value = staticsItems.Where(s => s.DateTime.Year == dateOnly.Year &&  s.DateTime.Month == dateOnly.Month).Sum(s => (staticType == StaticType.Kilometers) ? s.Kilometers : s.Price) ?? 0;
                     break;
                 case CalendarRange.Year:
                     value = staticsItems.Where(s => s.DateTime.Year == dateOnly.Year).Sum(s => (staticType == StaticType.Kilometers) ? s.Kilometers : s.Price) ?? 0;

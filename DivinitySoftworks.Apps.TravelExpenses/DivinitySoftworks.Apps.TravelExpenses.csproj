@@ -5,7 +5,12 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
+	
+  <ItemGroup>
+    <Content Include="Icon.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Core\Extensions\" />
@@ -13,10 +18,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MediatR" Version="10.0.1" />
-    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Syncfusion.XlsIO.Net.Core" Version="20.2.0.44" />
+    <PackageReference Include="MediatR" Version="11.1.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+    <PackageReference Include="Syncfusion.XlsIO.Net.Core" Version="20.4.0.42" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,4 +37,8 @@
     </None>
   </ItemGroup>
 
+  <PropertyGroup>
+	<GeneratedMSBuildEditorConfigFile>..\DivinitySoftworks.Apps.TravelExpenses\obj\DivinitySoftworks.Apps.TravelExpenses.GeneratedMSBuildEditorConfig.editorconfig</GeneratedMSBuildEditorConfigFile>
+  </PropertyGroup>
+	
 </Project>
