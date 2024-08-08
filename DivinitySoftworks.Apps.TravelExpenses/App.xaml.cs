@@ -7,6 +7,8 @@ using DivinitySoftworks.Apps.TravelExpenses.UI.ViewModels.TravelExpensesPage;
 using DivinitySoftworks.Apps.TravelExpenses.UI.Windows;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using System.Globalization;
+using System.Threading;
 
 namespace DivinitySoftworks.Apps.TravelExpenses {
 
@@ -22,6 +24,11 @@ namespace DivinitySoftworks.Apps.TravelExpenses {
         /// <inheritdoc/>
         protected override async void OnStartup(System.Windows.StartupEventArgs e) {
             base.OnStartup(e);
+            
+            // Set culture to en-US
+            CultureInfo culture = new CultureInfo("en-US");
+            Thread.CurrentThread.CurrentCulture = culture;
+            Thread.CurrentThread.CurrentUICulture = culture;
 
             await ServiceProvider.GetRequiredService<IUserSettings>().LoadAsync();
             await ServiceProvider.GetRequiredService<ILogService>().LoadAsync();
@@ -52,10 +59,10 @@ namespace DivinitySoftworks.Apps.TravelExpenses {
 
             services.AddSingleton<ISettingsPageViewModel, SettingsPageViewModel>();
 
-            services.AddTransient(typeof(MainWindow));
-            services.AddTransient(typeof(TravelExpensesPage));
-            services.AddTransient(typeof(LogsPage));
-            services.AddTransient(typeof(SettingsPage));
+            services.AddSingleton(typeof(MainWindow));
+            services.AddSingleton(typeof(TravelExpensesPage));
+            services.AddSingleton(typeof(LogsPage));
+            services.AddSingleton(typeof(SettingsPage));
         }
     }
 }

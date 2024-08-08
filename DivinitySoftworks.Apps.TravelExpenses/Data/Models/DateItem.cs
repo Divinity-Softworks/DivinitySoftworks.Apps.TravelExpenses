@@ -2,6 +2,7 @@
 using DivinitySoftworks.Apps.TravelExpenses.Data.Enums;
 using Newtonsoft.Json;
 using System;
+using System.Globalization;
 
 namespace DivinitySoftworks.Apps.TravelExpenses.Data.Models {
     public class DateItem : ViewModel {
@@ -59,7 +60,7 @@ namespace DivinitySoftworks.Apps.TravelExpenses.Data.Models {
         public double Price {
             get {
                 if (string.IsNullOrWhiteSpace(_details)) return 0.00;
-                return double.Parse($"{_details.Split("||")[3]}");
+                return double.Parse($"{_details.Split("||")[3]}", CultureInfo.InvariantCulture);
             }
         }
     }

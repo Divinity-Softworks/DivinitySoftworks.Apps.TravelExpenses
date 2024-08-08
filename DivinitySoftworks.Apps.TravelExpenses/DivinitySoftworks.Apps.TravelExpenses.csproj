@@ -30,7 +30,7 @@
 
   <ItemGroup>
     <None Update="AppSettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Resources\Company Logo.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -2,6 +2,8 @@
 using DivinitySoftworks.Apps.TravelExpenses.Core.Configuration;
 using DivinitySoftworks.Apps.TravelExpenses.Data.Models;
 using DivinitySoftworks.Apps.TravelExpenses.Services;
+using DivinitySoftworks.Apps.TravelExpenses.UI.Pages;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -34,11 +36,11 @@ namespace DivinitySoftworks.Apps.TravelExpenses.UI.ViewModels.TravelExpensesPage
         readonly ITravelExpensesService _travelExpensesService;
         readonly IUserSettings _userSettings;
 
-        public TravelExpensesPageViewModel(ILogService logService, IUserSettings userSettings, ITravelExpensesService travelExpensesService) {
+        public TravelExpensesPageViewModel(ILogService logService, IUserSettings userSettings, ITravelExpensesService travelExpensesService, IServiceProvider serviceProvider) {
             _logService = logService;
             _userSettings = userSettings;
             _travelExpensesService = travelExpensesService;
-            
+
             Date = DateOnly.FromDateTime(DateTime.Now);
         }
 
@@ -100,6 +102,9 @@ namespace DivinitySoftworks.Apps.TravelExpenses.UI.ViewModels.TravelExpensesPage
         }
 
         public Task UpdateStateAsync(DateItem dayItem) {
+            if (string.IsNullOrWhiteSpace(_userSettings.HomeAddress) || string.IsNullOrWhiteSpace(_userSettings.HomeAddress) || _userSettings.Kilometers is null || _userSettings.Price is null) 
+                return Task.CompletedTask;
+
             dayItem.State = dayItem.State == Data.Enums.DayState.Office ? Data.Enums.DayState.Unset : Data.Enums.DayState.Office;
             dayItem.Details = $"{_userSettings.HomeAddress}||{_userSettings.WorkAddress}||{_userSettings.Kilometers}||{_userSettings.Price}";
             return SaveAsync();
